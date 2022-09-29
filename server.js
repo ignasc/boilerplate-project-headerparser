@@ -6,6 +6,13 @@ require('dotenv').config();
 var express = require('express');
 var app = express();
 
+//variable to store client data
+var jsonData = {
+  "ipaddress": null,
+  "language": null,
+  "software": null
+}
+
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
@@ -20,9 +27,14 @@ app.get("/", function (req, res) {
 });
 
 
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+// retrieving data from request and sending it back 
+app.get("/api/whoami", function (req, res) {
+
+  jsonData.ipaddress = req.headers["x-forwarded-for"];
+  jsonData.language = req.headers["accept-language"];
+  jsonData.software = req.headers["user-agent"];
+  
+  res.json(jsonData);
 });
 
 
